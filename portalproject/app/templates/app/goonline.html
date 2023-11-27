@@ -1,0 +1,40 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Go Online | {% endblock %}
+
+{% block content %}
+<div class="p-10 lg:p-20 text-center">
+    <h1 class="text-3xl lg:text-6xl text-white">Go online</h1>
+    <p>Your current status: {% if user.is_online %}Online{% else %}Offline{% endif %}</p>
+    <form method="post" action="/chat/toggle/">
+      {% csrf_token %}
+      <button type="submit"  class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Toggle Status</button>
+    </form>
+
+
+
+
+    <div class="p-10 lg:p-20 text-center">
+            <div class="p-4 bg-white shadow rounded-xl text-center">
+
+
+
+
+
+
+
+<a href="/chat/connect/"> <button type="submit" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Connect with People</button>
+</a>
+
+
+
+
+
+
+
+</div>
+            </div>
+        </div>
+
+
+{% endblock %}

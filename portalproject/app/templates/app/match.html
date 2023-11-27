@@ -1,0 +1,66 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Rooms | {% endblock %}
+
+{% block content %}
+<div class="p-10 lg:p-20 text-center">
+  <h1 class="text-3xl lg:text-6xl text-white">Active Users</h1>
+</div>
+
+<div class="w-full flex flex-wrap items-center">
+
+  <div class="w-full lg:w-1/4 px-3 py-3">
+    <div class="p-4 bg-white shadow rounded-xl text-center">
+      {% csrf_token %}
+  <div class="box-container">
+    {% if other_user %}
+    <h1 style="text-align: center; color: brown; font-size: 25px;">Select a user to connect with Same Interest :</h1>
+      {% for user in other_user %}
+        <div class="user">
+
+          <p><strong>{{ user.full_name }}</strong>
+            <button class="connect-button" data-user-id="{{ user.id }}" onclick="connectUser('{{ user.id }}')">Connect</button>
+        </div>
+      {% endfor %}
+    {% else %}
+    <h1 style="text-align: center; color: brown; font-size: 25px;">Select a user to connect with Online User :</h1>
+    {% for user in online_user %}
+    <div class="user">
+      <p><strong>{{ user.full_name }}</strong>
+        <button class="connect-button" data-user-id="{{ user.id }}" onclick="connectUser('{{ user.id }}')">Connect</button>
+
+        {% endfor %}
+    {% endif %}
+  </div>
+  {% block scripts %}
+  <script>
+    function connectUser(userId) {
+      fetch('/chat/connect-establish/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: 'user_id=' + userId
+      })
+
+      .then(response => response.json())
+      .then(data => {
+        if (data.user1 && data.user2) {
+          // Connection established successfully
+          window.location.href = `/chat/connected/?user1=${data.user1}&user2=${data.user2}&connection=${data.connection}`;  // Redirect to the home.html page
+          console.log(`user1=${data.user1}, user2=${data.user2}`);
+        } else {
+          // Display an error message to the user
+        }
+      })
+      .catch(error => {
+        console.error('Error occurred while connecting to server:', error);
+        // Display an error message to the user
+      });
+    }
+  </script>
+  {% endblock %}
+{% endblock %}
+</div>
+    </div>
