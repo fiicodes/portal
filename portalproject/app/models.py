@@ -10,8 +10,6 @@ class Interest(models.Model):
 
             return self.name
 
-
-
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers

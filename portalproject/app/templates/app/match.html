@@ -33,6 +33,7 @@
     {% endif %}
   </div>
   {% block scripts %}
+
   <script>
     function connectUser(userId) {
       fetch('/chat/connect-establish/', {
@@ -43,15 +44,19 @@
         },
         body: 'user_id=' + userId
       })
-
       .then(response => response.json())
       .then(data => {
-        if (data.user1 && data.user2) {
+        if (data.user1 && data.user2 && data.connection) {
           // Connection established successfully
-          window.location.href = `/chat/connected/?user1=${data.user1}&user2=${data.user2}&connection=${data.connection}`;  // Redirect to the home.html page
-          console.log(`user1=${data.user1}, user2=${data.user2}`);
+          const user1Id = data.user1.id;
+          const user2Id = data.user2.id;
+          const connectionId = data.connection.id;
+          const url = `/chat/connected/?user1=${user1Id}&user2=${user2Id}&connection=${connectionId}`;
+          window.location.href = url;  // Redirect to the connected page
+          console.log(`user1=${user1Id}, user2=${user2Id}`);
         } else {
           // Display an error message to the user
+          console.error('Error: Invalid response from server');
         }
       })
       .catch(error => {
@@ -60,7 +65,8 @@
       });
     }
   </script>
-  {% endblock %}
+{% endblock %}
+
 {% endblock %}
 </div>
     </div>
